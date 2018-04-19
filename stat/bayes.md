@@ -33,17 +33,18 @@ P(theta|data) = P(data, theta) / P(data) = P(data, theta) / sum(P(data|theta)P(t
 
 似然函数：P(同事说被撞的车型|被撞的车型), P(data=m|theta=m) = 0.9, P(data=m|theta=o) = 1-P(data=o|theta=0) = 0.1
 
-后验概率：P(theta=m|data=m) = P(data=m, theta=m)/P(data=m) 
+后验概率：
+    P(theta=m|data=m) = P(data=m, theta=m)/P(data=m) 
 
-= P(data=m,theta=m) / [P(data=m,theta=m) + P(data=m,theta=o)] **全概公式**
+    = P(data=m,theta=m) / [P(data=m,theta=m) + P(data=m,theta=o)] **全概公式**
 
-= P(data=m|theta=m)P(theta=m) / [P(data=m,theta=m) + P(data=m,theta=o)]  **条件概率**
+    = P(data=m|theta=m)P(theta=m) / [P(data=m,theta=m) + P(data=m,theta=o)]  **条件概率**
 
-= 0.9*0.25 / (0.9*0.25 + 0.1*0.75)
+    = 0.9*0.25 / (0.9*0.25 + 0.1*0.75)
 
-= 0.75 
+    = 0.75 
 
-< 0.9
+    < 0.9
 
 # 变式1：稀有的小蓝
 
@@ -66,5 +67,5 @@ P(theta|data) = P(data, theta) / P(data) = P(data, theta) / sum(P(data|theta)P(t
 
 思考题答案
 ==============================
-1. (40/4040*0.9) / (40/4040*0.9+4000/4040*0.1) ~= 0.08
-2. (0.25*0.9) / (0.25*0.9+0.75*0.8) ~= 0.27
+    1. (40/4040*0.9) / (40/4040*0.9+4000/4040*0.1) ~= 0.08
+    2. (0.25*0.9) / (0.25*0.9+0.75*0.8) ~= 0.27
