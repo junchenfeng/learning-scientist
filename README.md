@@ -1,40 +1,44 @@
-# 学习科学家培养方案
+学习科学家培养方案
+=====================
+# 数据和模型
 
 ## 统计学基础
 ### 事件、联合概率、条件概率
-### 贝叶斯
+### 贝叶斯定理
 ### 随机变量及其分布
-### 最大似然估计
-### 马尔科夫-蒙特卡洛方法
+### 假设检验
+### 列联表检验和两样本均值检验
+### Optimization入门
+### 最小残差法和OLS
+### 最大虽然估计和逻辑回归
 
-## 数据模型
-### 常见分类器
-### 选型与调参
-### 线性回归
-### 隐马尔科夫链(Hidden Markov Model)
 
-## 实验方法
-### 经典假设检验
-### 多臂老虎机
+## 实验设计
 
-## 教育心理学基础
-### How People Learn
-### Mastery: Bloom and Vygostky
-### Procedure Learning and Delibrate Practice
-### Transfer Learning and Creativity
-
-## 教学法
-### Learning by design
-### Classroom management
-
-## 专业模型
-### Value Added Model
+## 测评
 ### Item Response Theory
 ### Bayesian Knowledge Tracing
-### Knowledge Space
+### Value Added Model
 
-## 进阶
-### 实验设计和样本选择
-### 概率图和知识树
-### 自适应测试 (Computerized Adaptive Test)
-### 学习状态研究(Affective State Analysis)
+## 自适应推荐
+### Computerized Adaptive Testing
+### 简单知识图谱推荐
+
+
+## 进阶话题
+### 贝叶斯实验和多臂老虎机
+### Knowledge Space
+### Affective State
+### Stealth Assessment
+### Learning Science概述
+
+
+# Pedagogy
+
+## How People Learn
+## Mastery: Bloom and Vygostky
+## Procedure Learning and Delibrate Practice
+## Transfer Learning and Creativity
+## Learning by design
+## Teaching As Leadership
+
