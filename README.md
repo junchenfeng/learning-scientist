@@ -14,6 +14,8 @@
 
 
 ## 实验设计
+### 选择性偏误，随机实验和准随机实验
+### 样本选择和抽样方法
 
 ## 测评
 ### Item Response Theory
@@ -22,12 +24,13 @@
 
 ## 自适应推荐
 ### Computerized Adaptive Testing
-### 简单知识图谱推荐
+### Knowledge Space
+
 
 
 ## 进阶话题
 ### 贝叶斯实验和多臂老虎机
-### Knowledge Space
+### BKT + KS 
 ### Affective State
 ### Stealth Assessment
 ### Learning Science概述
