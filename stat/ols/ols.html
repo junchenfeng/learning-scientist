@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Learning Science Bootcamp</title>
+    <meta charset="utf-8">
+    <meta name="author" content="冯俊晨" />
+    <link href="ols_files/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="zh-CN.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Learning Science Bootcamp
+## Ordinary Least Square
+### 冯俊晨
+### 2018/09/11
+
+---
+
+
+
+
+---
+# OLS的基本公式
+
+`$$\Huge Y=\beta X+\epsilon$$`
+其中 `\(Y\)` 表示**自变量**, `\(X\)`表示**因变量**（矩阵），这都是常量
+
+`\(\epsilon\)` 是**随机干扰**(有时又被称为残差项)，这是个随机变量
+
+
+---
+class: middle
+
+# 教育回报
+.pull-left[
+模型（或者叫数据生成过程）
+`$$\Huge Income=\beta Edu+\epsilon$$`
+]
+.pull-right[
+估计结果
+`$$\Huge Income=\hat{\beta} Edu$$`
+
+注意到
+- `\(\beta\)`上的帽子表示估计值
+- `\(\epsilon\)` "消失"了
+- 事实上 `\(\hat{\beta}\)` 是 `\(\epsilon\)` 的函数，因此它是个随机变量
+]
+
+
+---
+# 教育回报 
+
+.pull-left[
+数据来源：中国家庭金融调研(2013)，有收入的成年人，未经调权
+
+
+```
+## 
+## ================================================
+##                         Dependent variable:     
+##                     ----------------------------
+##                                income           
+## ------------------------------------------------
+## edu                         3,520.073***        
+##                               (76.053)          
+##                                                 
+## Constant                   -4,970.804***        
+##                              (922.144)          
+##                                                 
+## ------------------------------------------------
+## Observations                   23,436           
+## R2                             0.084            
+## Adjusted R2                    0.084            
+## Residual Std. Error   42,395.930 (df = 23434)   
+## F Statistic         2,142.225*** (df = 1; 23434)
+## ================================================
+## Note:                *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+```
+]
+.pull-right[
+- 每增加一年教育，工资涨3520
+- 模型解释了收入数据8.4%的变化
+- 总共有2万3千个观察值
+]
+---
+# log转化
+
+.pull-left[
+`$$\Huge log(Income)=\beta Edu+\epsilon$$`
+
+
+```
+## 
+## ================================================
+##                         Dependent variable:     
+##                     ----------------------------
+##                             log(income)         
+## ------------------------------------------------
+## edu                           0.080***          
+##                               (0.002)           
+##                                                 
+## Constant                      9.176***          
+##                               (0.021)           
+##                                                 
+## ------------------------------------------------
+## Observations                   23,436           
+## R2                             0.080            
+## Adjusted R2                    0.080            
+## Residual Std. Error      0.984 (df = 23434)     
+## F Statistic         2,040.636*** (df = 1; 23434)
+## ================================================
+## Note:                *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+```
+]
+.pull-right[
+- 每增加一年教育，工资涨8%
+- 在0.01的显著性水平上不为0
+]
+
+---
+# 离散变量
+
+
+
+```
+## 
+## ===================================================
+##                             Dependent variable:    
+##                         ---------------------------
+##                                 log(income)        
+## ---------------------------------------------------
+## coarse_degreeprimary             0.247***          
+##                                   (0.054)          
+##                                                    
+## coarse_degreesecondary           0.407***          
+##                                   (0.052)          
+##                                                    
+## coarse_degreehighschool          0.572***          
+##                                   (0.052)          
+##                                                    
+## coarse_degreecollege             0.965***          
+##                                   (0.052)          
+##                                                    
+## coarse_degreemaster+             1.515***          
+##                                   (0.067)          
+##                                                    
+## Constant                         9.473***          
+##                                   (0.051)          
+##                                                    
+## ---------------------------------------------------
+## Observations                      23,436           
+## R2                                 0.086           
+## Adjusted R2                        0.086           
+## Residual Std. Error         0.981 (df = 23430)     
+## F Statistic             440.083*** (df = 5; 23430) 
+## ===================================================
+## Note:                   *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+```
+
+---
+# 离散变量
+
+和没上过学的相比
+
+- 上过小学的**多**赚24.7%
+- 上过初中的**多**赚40.7%
+
+综上推论：和上过小学的相比，上过初中的大约多赚16%
+
+**思考**：之前教育年限的线性假设合理么？
+
+---
+
+# 遗漏变量
+
+收入不仅和受教育年限有关，跟工作经验也有关。定义工作经验为年龄-受教育年限
+
+`$$\Huge log(Income)=\beta_1 Edu+\beta_2 Exp+\epsilon$$`
+
+
+```
+## 
+## ================================================
+##                         Dependent variable:     
+##                     ----------------------------
+##                             log(income)         
+## ------------------------------------------------
+## edu                           0.090***          
+##                               (0.002)           
+##                                                 
+## exp                           0.007***          
+##                               (0.001)           
+##                                                 
+## Constant                      8.896***          
+##                               (0.034)           
+##                                                 
+## ------------------------------------------------
+## Observations                   23,436           
+## R2                             0.084            
+## Adjusted R2                    0.084            
+## Residual Std. Error      0.981 (df = 23433)     
+## F Statistic         1,080.025*** (df = 2; 23433)
+## ================================================
+## Note:                *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+```
+---
+
+# 线性模型中的非线性元素
+
+`$$\Huge log(Income)=\beta_1 Edu+\beta_2 Exp+\beta_3 Exp^2+\epsilon$$`
+**思考** 经验对工资的影响是什么？
+
+
+
+```
+## 
+## ===============================================
+##                         Dependent variable:    
+##                     ---------------------------
+##                             log(income)        
+## -----------------------------------------------
+## edu                          0.088***          
+##                               (0.002)          
+##                                                
+## exp                          0.038***          
+##                               (0.003)          
+##                                                
+## exp2                         -0.001***         
+##                              (0.00005)         
+##                                                
+## Constant                     8.574***          
+##                               (0.042)          
+##                                                
+## -----------------------------------------------
+## Observations                  23,436           
+## R2                             0.091           
+## Adjusted R2                    0.091           
+## Residual Std. Error     0.978 (df = 23432)     
+## F Statistic         779.081*** (df = 3; 23432) 
+## ===============================================
+## Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+```
+
+
+---
+
+# 是时候展现真正的技术了
+
+
+```
+## 
+## =============================================================================
+##                                          Dependent variable:                 
+##                         -----------------------------------------------------
+##                                              log(income)                     
+##                                    (1)                        (2)            
+## -----------------------------------------------------------------------------
+## coarse_degreeprimary             0.247***                   0.116**          
+##                                  (0.054)                    (0.056)          
+##                                                                              
+## coarse_degreesecondary           0.407***                   0.283***         
+##                                  (0.052)                    (0.055)          
+##                                                                              
+## coarse_degreehighschool          0.572***                   0.474***         
+##                                  (0.052)                    (0.055)          
+##                                                                              
+## coarse_degreecollege             0.965***                   0.903***         
+##                                  (0.052)                    (0.056)          
+##                                                                              
+## coarse_degreemaster+             1.515***                   1.477***         
+##                                  (0.067)                    (0.070)          
+##                                                                              
+## exp                                                         0.043***         
+##                                                             (0.003)          
+##                                                                              
+## exp2                                                       -0.001***         
+##                                                            (0.00005)         
+##                                                                              
+## Constant                         9.473***                   9.020***         
+##                                  (0.051)                    (0.059)          
+##                                                                              
+## -----------------------------------------------------------------------------
+## Observations                      23,436                     23,436          
+## R2                                0.086                      0.097           
+## Adjusted R2                       0.086                      0.097           
+## Residual Std. Error         0.981 (df = 23430)         0.974 (df = 23428)    
+## F Statistic             440.083*** (df = 5; 23430) 361.512*** (df = 7; 23428)
+## =============================================================================
+## Note:                                             *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+```
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

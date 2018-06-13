@@ -1,0 +1,148 @@
+---
+title: "Learning Science Bootcamp"
+subtitle: "Ordinary Least Square"
+author: "冯俊晨"
+date: "2018/09/11"
+output:
+  xaringan::moon_reader:
+    css: [default, zh-CN.css]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(readr)
+library(dplyr)
+library(stargazer)
+chfs = read_csv("../../data/ret2edu.csv")
+
+# merge into larger degree
+chfs$coarse_degree = 0
+chfs$coarse_degree[chfs$degree=='primary'] = 1
+chfs$coarse_degree[chfs$degree=='secondary'] = 2
+chfs$coarse_degree[chfs$degree=='high'|chfs$degree=='tech'] = 3
+chfs$coarse_degree[chfs$degree=='associate'|chfs$degree=='bachelor'] = 4
+chfs$coarse_degree[chfs$degree=='master'|chfs$degree=='phd'] = 5
+
+chfs$coarse_degree = factor(chfs$coarse_degree, labels=c('noschool','primary','secondary','highschool','college','master+'))
+
+chfs$exp = chfs$age - chfs$edu
+```
+
+---
+# OLS的基本公式
+
+$$\Huge Y=\beta X+\epsilon$$
+其中 $Y$ 表示**自变量**, $X$表示**因变量**（矩阵），这都是常量
+
+$\epsilon$ 是**随机干扰**(有时又被称为残差项)，这是个随机变量
+
+
+---
+class: middle
+
+# 教育回报
+.pull-left[
+模型（或者叫数据生成过程）
+$$\Huge Income=\beta Edu+\epsilon$$
+]
+.pull-right[
+估计结果
+$$\Huge Income=\hat{\beta} Edu$$
+
+注意到
+- $\beta$上的帽子表示估计值
+- $\epsilon$ "消失"了
+- 事实上 $\hat{\beta}$ 是 $\epsilon$ 的函数，因此它是个随机变量
+]
+
+
+---
+# 教育回报 
+
+.pull-left[
+数据来源：中国家庭金融调研(2013)，有收入的成年人，未经调权
+
+```{r, echo=FALSE}
+basic_model = lm(data=chfs, income~edu)
+stargazer(basic_model, type='text')
+```
+]
+.pull-right[
+- 每增加一年教育，工资涨3520
+- 模型解释了收入数据8.4%的变化
+- 总共有2万3千个观察值
+]
+---
+# log转化
+
+.pull-left[
+$$\Huge log(Income)=\beta Edu+\epsilon$$
+
+```{r, echo=FALSE}
+stargazer(lm(data=chfs, log(income)~edu), type='text')
+```
+]
+.pull-right[
+- 每增加一年教育，工资涨8%
+- 在0.01的显著性水平上不为0
+]
+
+---
+# 离散变量
+
+
+```{r, echo=FALSE}
+discrete_1 = lm(data=chfs, log(income)~coarse_degree)
+stargazer(discrete_1, type='text')
+```
+
+---
+# 离散变量
+
+和没上过学的相比
+
+- 上过小学的**多**赚24.7%
+- 上过初中的**多**赚40.7%
+
+综上推论：和上过小学的相比，上过初中的大约多赚16%
+
+**思考**：之前教育年限的线性假设合理么？
+
+---
+
+# 遗漏变量
+
+收入不仅和受教育年限有关，跟工作经验也有关。定义工作经验为年龄-受教育年限
+
+$$\Huge log(Income)=\beta_1 Edu+\beta_2 Exp+\epsilon$$
+
+```{r,echo=FALSE}
+stargazer(lm(data=chfs, log(income)~edu+exp), type='text')
+
+```
+---
+
+# 线性模型中的非线性元素
+
+$$\Huge log(Income)=\beta_1 Edu+\beta_2 Exp+\beta_3 Exp^2+\epsilon$$
+**思考** 经验对工资的影响是什么？
+
+
+```{r,echo=FALSE}
+chfs = chfs %>% mutate(exp2=exp^2)
+stargazer(lm(data=chfs, log(income)~edu+exp+exp2), type='text')
+```
+
+
+---
+
+# 是时候展现真正的技术了
+
+```{r, echo=FALSE}
+discrete_2 = lm(data=chfs, log(income)~coarse_degree+exp+exp2)
+stargazer(discrete_1, discrete_2, type='text')
+```
