@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ---
 # OLS的基本公式
 
-`$$\Huge Y=\beta X+\epsilon$$`
+`$$\Large Y=\beta X+\epsilon$$`
 其中 `\(Y\)` 表示**自变量**, `\(X\)`表示**因变量**（矩阵），这都是常量
 
 `\(\epsilon\)` 是**随机干扰**(有时又被称为残差项)，这是个随机变量
@@ -36,11 +36,11 @@ class: middle
 # 教育回报
 .pull-left[
 模型（或者叫数据生成过程）
-`$$\Huge Income=\beta Edu+\epsilon$$`
+`$$\Large Income=\beta Edu+\epsilon$$`
 ]
 .pull-right[
 估计结果
-`$$\Huge Income=\hat{\beta} Edu$$`
+`$$\Large Income=\hat{\beta} Edu$$`
 
 注意到
 - `\(\beta\)`上的帽子表示估计值
@@ -63,12 +63,8 @@ class: middle
 ##                     ----------------------------
 ##                                income           
 ## ------------------------------------------------
-## edu                         3,520.073***        
-##                               (76.053)          
-##                                                 
-## Constant                   -4,970.804***        
-##                              (922.144)          
-##                                                 
+## edu                    3,520.073*** (76.053)    
+## Constant              -4,970.804*** (922.144)   
 ## ------------------------------------------------
 ## Observations                   23,436           
 ## R2                             0.084            
@@ -82,13 +78,13 @@ class: middle
 .pull-right[
 - 每增加一年教育，工资涨3520
 - 模型解释了收入数据8.4%的变化
-- 总共有2万3千个观察值
+- 参数估计的标准误是76.053
 ]
 ---
 # log转化
 
 .pull-left[
-`$$\Huge log(Income)=\beta Edu+\epsilon$$`
+`$$\Large log(Income)=\beta Edu+\epsilon$$`
 
 
 ```
@@ -98,12 +94,8 @@ class: middle
 ##                     ----------------------------
 ##                             log(income)         
 ## ------------------------------------------------
-## edu                           0.080***          
-##                               (0.002)           
-##                                                 
-## Constant                      9.176***          
-##                               (0.021)           
-##                                                 
+## edu                       0.080*** (0.002)      
+## Constant                  9.176*** (0.021)      
 ## ------------------------------------------------
 ## Observations                   23,436           
 ## R2                             0.080            
@@ -116,7 +108,6 @@ class: middle
 ]
 .pull-right[
 - 每增加一年教育，工资涨8%
-- 在0.01的显著性水平上不为0
 ]
 
 ---
@@ -126,37 +117,25 @@ class: middle
 
 ```
 ## 
-## ===================================================
-##                             Dependent variable:    
-##                         ---------------------------
-##                                 log(income)        
-## ---------------------------------------------------
-## coarse_degreeprimary             0.247***          
-##                                   (0.054)          
-##                                                    
-## coarse_degreesecondary           0.407***          
-##                                   (0.052)          
-##                                                    
-## coarse_degreehighschool          0.572***          
-##                                   (0.052)          
-##                                                    
-## coarse_degreecollege             0.965***          
-##                                   (0.052)          
-##                                                    
-## coarse_degreemaster+             1.515***          
-##                                   (0.067)          
-##                                                    
-## Constant                         9.473***          
-##                                   (0.051)          
-##                                                    
-## ---------------------------------------------------
-## Observations                      23,436           
-## R2                                 0.086           
-## Adjusted R2                        0.086           
-## Residual Std. Error         0.981 (df = 23430)     
-## F Statistic             440.083*** (df = 5; 23430) 
-## ===================================================
-## Note:                   *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+## ===============================================
+##                         Dependent variable:    
+##                     ---------------------------
+##                             log(income)        
+## -----------------------------------------------
+## xueliprimary             0.247*** (0.054)      
+## xuelisecondary           0.407*** (0.052)      
+## xuelihighschool          0.572*** (0.052)      
+## xuelicollege             0.965*** (0.052)      
+## xuelimaster+             1.515*** (0.067)      
+## Constant                 9.473*** (0.051)      
+## -----------------------------------------------
+## Observations                  23,436           
+## R2                             0.086           
+## Adjusted R2                    0.086           
+## Residual Std. Error     0.981 (df = 23430)     
+## F Statistic         440.083*** (df = 5; 23430) 
+## ===============================================
+## Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
 ```
 
 ---
@@ -177,7 +156,7 @@ class: middle
 
 收入不仅和受教育年限有关，跟工作经验也有关。定义工作经验为年龄-受教育年限
 
-`$$\Huge log(Income)=\beta_1 Edu+\beta_2 Exp+\epsilon$$`
+`$$\Large log(Income)=\beta_1 Edu+\beta_2 Exp+\epsilon$$`
 
 
 ```
@@ -187,15 +166,9 @@ class: middle
 ##                     ----------------------------
 ##                             log(income)         
 ## ------------------------------------------------
-## edu                           0.090***          
-##                               (0.002)           
-##                                                 
-## exp                           0.007***          
-##                               (0.001)           
-##                                                 
-## Constant                      8.896***          
-##                               (0.034)           
-##                                                 
+## edu                       0.090*** (0.002)      
+## exp                       0.007*** (0.001)      
+## Constant                  8.896*** (0.034)      
 ## ------------------------------------------------
 ## Observations                   23,436           
 ## R2                             0.084            
@@ -209,7 +182,7 @@ class: middle
 
 # 线性模型中的非线性元素
 
-`$$\Huge log(Income)=\beta_1 Edu+\beta_2 Exp+\beta_3 Exp^2+\epsilon$$`
+`$$\Large log(Income)=\beta_1 Edu+\beta_2 Exp+\beta_3 Exp^2+\epsilon$$`
 **思考** 经验对工资的影响是什么？
 
 
@@ -221,18 +194,10 @@ class: middle
 ##                     ---------------------------
 ##                             log(income)        
 ## -----------------------------------------------
-## edu                          0.088***          
-##                               (0.002)          
-##                                                
-## exp                          0.038***          
-##                               (0.003)          
-##                                                
-## exp2                         -0.001***         
-##                              (0.00005)         
-##                                                
-## Constant                     8.574***          
-##                               (0.042)          
-##                                                
+## edu                      0.088*** (0.002)      
+## exp                      0.038*** (0.003)      
+## exp2                    -0.001*** (0.00005)    
+## Constant                 8.574*** (0.042)      
 ## -----------------------------------------------
 ## Observations                  23,436           
 ## R2                             0.091           
@@ -246,49 +211,262 @@ class: middle
 
 ---
 
-# 是时候展现真正的技术了
+# 比较模型
+- 变量的不同阶次（exp的平方项）
+- 变量的不同形式（edu VS xueli）
 
 
 ```
 ## 
-## =============================================================================
-##                                          Dependent variable:                 
-##                         -----------------------------------------------------
-##                                              log(income)                     
-##                                    (1)                        (2)            
-## -----------------------------------------------------------------------------
-## coarse_degreeprimary             0.247***                   0.116**          
-##                                  (0.054)                    (0.056)          
-##                                                                              
-## coarse_degreesecondary           0.407***                   0.283***         
-##                                  (0.052)                    (0.055)          
-##                                                                              
-## coarse_degreehighschool          0.572***                   0.474***         
-##                                  (0.052)                    (0.055)          
-##                                                                              
-## coarse_degreecollege             0.965***                   0.903***         
-##                                  (0.052)                    (0.056)          
-##                                                                              
-## coarse_degreemaster+             1.515***                   1.477***         
-##                                  (0.067)                    (0.070)          
-##                                                                              
-## exp                                                         0.043***         
-##                                                             (0.003)          
-##                                                                              
-## exp2                                                       -0.001***         
-##                                                            (0.00005)         
-##                                                                              
-## Constant                         9.473***                   9.020***         
-##                                  (0.051)                    (0.059)          
-##                                                                              
-## -----------------------------------------------------------------------------
-## Observations                      23,436                     23,436          
-## R2                                0.086                      0.097           
-## Adjusted R2                       0.086                      0.097           
-## Residual Std. Error         0.981 (df = 23430)         0.974 (df = 23428)    
-## F Statistic             440.083*** (df = 5; 23430) 361.512*** (df = 7; 23428)
-## =============================================================================
-## Note:                                             *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+## ========================================================================
+##                                   Dependent variable:                   
+##                 --------------------------------------------------------
+## ------------------------------------------------------------------------
+## edu             0.080*** (0.002)  0.088*** (0.002)                      
+## xueliprimary                                           0.116** (0.056)  
+## xuelisecondary                                        0.283*** (0.055)  
+## xuelihighschool                                       0.474*** (0.055)  
+## xuelicollege                                          0.903*** (0.056)  
+## xuelimaster+                                          1.477*** (0.070)  
+## exp                               0.038*** (0.003)    0.043*** (0.003)  
+## exp2                             -0.001*** (0.00005) -0.001*** (0.00005)
+## Constant        9.176*** (0.021)  8.574*** (0.042)    9.020*** (0.059)  
+## ------------------------------------------------------------------------
+## Adjusted R2          0.080              0.091               0.097       
+## ========================================================================
+## Note:                                        *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+```
+
+---
+
+# 上述模型还有什么问题？
+
+- 遗漏变量：其他影响工资的因素
+- 模型形式：edu和exp是否线性可加？比如是否存在edu和exp的交互项
+- (*)错误的标准误
+
+- **内生性** 
+一种特殊的遗漏变量错误。残差项和自变量相关！
+
+.pull-left[
+真实模型
+`$$\Large Y = \alpha Edu + \gamma IQ + \eta$$`
+`$$\Large Edu = \delta IQ + \xi$$`
+]
+
+.pull-right[
+回归模型
+`$$\Large Y = \beta Edu + \epsilon$$`
+]
+
+---
+# 为什么我们还要用OLS
+
+All models are wrong, but some are useful. By George P Box
+
+- （主要的）因果推断工具
+- 大部分情况下，简单的OLS就能做到60分；不能超过OLS就可以洗洗睡了
+- 业界和学界的通用语言：统计学方向和社会科学方向必修
+
+我们这里介绍OLS的主要目的是用来做之前学过的很多统计检验
+
+---
+# OLS假设检验(1)
+
+四个组：
+
+- 长视频 (long video)
+- 短视频 (short video)
+- 轻交互 (interactive)
+- 控制组 (control)
+
+两道题:
+
+- 类题 (similar)
+- 简单变式 (transfer)
+
+---
+# OLS假设检验(2)
+
+```
+## 
+## ======================================================================
+##                                     Dependent variable:               
+##                      -------------------------------------------------
+##                              similar                  transfer        
+## ----------------------------------------------------------------------
+## course_idinteractive          0.108                    0.149          
+##                           p = 0.0001***            p = 0.00000***     
+##                                                                       
+## course_idlong_video           0.179                    0.197          
+##                            p = 0.000***             p = 0.000***      
+##                                                                       
+## course_idshort_video          0.054                    0.056          
+##                             p = 0.085*               p = 0.075*       
+##                                                                       
+## Constant                      0.269                    0.310          
+##                            p = 0.000***             p = 0.000***      
+##                                                                       
+## ----------------------------------------------------------------------
+## Observations                  2,101                    2,203          
+## R2                            0.018                    0.024          
+## Adjusted R2                   0.017                    0.022          
+## Residual Std. Error     0.475 (df = 2097)        0.487 (df = 2199)    
+## F Statistic          12.774*** (df = 3; 2097) 17.759*** (df = 3; 2199)
+## ======================================================================
+## Note:                                      *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+```
+
+---
+# OLS中的假设检验
+
+H0: 对于类题而言，短视频的教学效果和控制组一样
+
+```r
+linearHypothesis(similar_stat,
+                 "course_idshort_video = 0")
+```
+
+```
+## Linear hypothesis test
+## 
+## Hypothesis:
+## course_idshort_video = 0
+## 
+## Model 1: restricted model
+## Model 2: master ~ course_id
+## 
+##   Res.Df    RSS Df Sum of Sq     F  Pr(&gt;F)  
+## 1   2098 473.44                             
+## 2   2097 472.77  1   0.67071 2.975 0.08471 .
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+H0：对于类题而言，短视频的教学效果比控制组高5%
+
+```r
+linearHypothesis(similar_stat,
+                 "course_idshort_video = 0.05")
+```
+
+```
+## Linear hypothesis test
+## 
+## Hypothesis:
+## course_idshort_video = 0.05
+## 
+## Model 1: restricted model
+## Model 2: master ~ course_id
+## 
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1   2098 472.77                           
+## 2   2097 472.77  1 0.0042044 0.0186 0.8914
+```
+
+---
+
+H0：对于类题而言，长视频的教学效果和轻交互一样好
+
+```r
+linearHypothesis(similar_stat,
+                 "course_idlong_video = course_idinteractive")
+```
+
+```
+## Linear hypothesis test
+## 
+## Hypothesis:
+## - course_idinteractive  + course_idlong_video = 0
+## 
+## Model 1: restricted model
+## Model 2: master ~ course_id
+## 
+##   Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  
+## 1   2098 474.19                              
+## 2   2097 472.77  1    1.4202 6.2993 0.01215 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+H0：对于类题而言，长视频的教学效果比轻交互好5%
+
+
+```r
+linearHypothesis(similar_stat,
+                 "course_idlong_video -course_idinteractive = 0.05")
+```
+
+```
+## Linear hypothesis test
+## 
+## Hypothesis:
+## - course_idinteractive  + course_idlong_video = 0.05
+## 
+## Model 1: restricted model
+## Model 2: master ~ course_id
+## 
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1   2098 472.89                           
+## 2   2097 472.77  1   0.12416 0.5507 0.4581
+```
+
+---
+
+H0：对于迁移而言，长视频的教学效果比轻交互好1%
+
+
+```r
+linearHypothesis(transfer_stat,
+                 "course_idlong_video - course_idinteractive = 0.01")
+```
+
+```
+## Linear hypothesis test
+## 
+## Hypothesis:
+## - course_idinteractive  + course_idlong_video = 0.01
+## 
+## Model 1: restricted model
+## Model 2: master ~ course_id
+## 
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1   2200 522.56                           
+## 2   2199 522.14  1   0.41843 1.7622 0.1845
+```
+
+---
+
+H0： 交互手段和教学效果无关 (Pearson Test)
+
+
+```r
+linearHypothesis(transfer_stat, 
+                 c("course_idlong_video = 0",
+                   "course_idinteractive =0",
+                   "course_idshort_video=0"))
+```
+
+```
+## Linear hypothesis test
+## 
+## Hypothesis:
+## course_idlong_video = 0
+## course_idinteractive = 0
+## course_idshort_video = 0
+## 
+## Model 1: restricted model
+## Model 2: master ~ course_id
+## 
+##   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1   2202 534.79                                  
+## 2   2199 522.14  3     12.65 17.759 2.173e-11 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
