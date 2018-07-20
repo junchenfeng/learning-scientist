@@ -1,0 +1,58 @@
+---
+title: "Logit回归"
+subtitle: "Generalized Linear Least Square"
+author: "冯俊晨"
+date: "2018/07/18"
+output:
+  xaringan::moon_reader:
+    css: [default, zh-CN.css]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+
+---
+# 二元因变量
+
+我们接触的许多学习数据都是二元的
+
+研究问题从 $Y=f(x)$ 变成 $Pr(Y=1) = f(x)$
+
+$Pr(Y=1)$意味着Y是一个随机变量，它必须要有分布函数 
+
+*思考* OLS里的$\epsilon$去哪里了？
+
+用OLS分析二元模型会有一些理论/实践问题
+
+- Y服从均匀分布（理论问题）
+
+- $\widehat{Pr(Y=1)}$不是一个合法概率，即它可能大于1或者小于0
+
+
+---
+# Logit
+
+PMF
+
+$$ Pr(Y=1) = \frac{1}{1+e^{-(X\beta)}}$$
+
+*思考* $Pr(Y=0)$是什么
+
+这是一个非线性模型，但是我们的依然可以把它写作一个线性模型
+
+$$g(Y) = X\beta$$
+
+这类模型我们称之为一般线性模型（[Generalized Linear Model](https://en.wikipedia.org/wiki/Generalized_linear_model)）
+
+
+---
+# Logit in R
+
+
