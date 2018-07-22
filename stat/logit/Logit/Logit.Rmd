@@ -15,6 +15,17 @@ output:
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
+library(readr)
+library(dplyr)
+library(stargazer)
+library(ggplot2)
+
+exp_result = read_delim("../../../data/exp_result.csv", delim='\t')
+exp_result$duration = as.numeric(exp_result$duration)
+exp_result = exp_result %>% filter(duration<=360000) %>% filter(duration>=1000) %>% filter(!is.na(duration))
+exp_result = exp_result %>% transform(course_id = factor(course_id)) %>% transform(posttest=factor(posttest))
+
+
 ```
 
 
@@ -27,14 +38,32 @@ options(htmltools.dir.version = FALSE)
 
 $Pr(Y=1)$意味着Y是一个随机变量，它必须要有分布函数 
 
-*思考* OLS里的$\epsilon$去哪里了？
+*思考* OLS里的 $\epsilon$ 去哪里了？
 
 用OLS分析二元模型会有一些理论/实践问题
 
 - Y服从均匀分布（理论问题）
 
-- $\widehat{Pr(Y=1)}$不是一个合法概率，即它可能大于1或者小于0
+- $\widehat{Pr(Y=1)}$ 不是一个合法概率，即它可能大于1或者小于0
 
+---
+# OLS example: Fit
+```{r, echo=FALSE}
+ols_fit = lm(master~posttest+course_id+duration,data=exp_result)
+stargazer(ols_fit,
+          type='text', 
+          column.labels = c("similar", "transfer"), 
+          model.numbers=F, dep.var.labels.include = FALSE,
+          report=("vcp*"))
+```
+
+---
+# OLS example: Predict
+
+```{r, echo=FALSE}
+hist(predict(ols_fit)) 
+
+```
 
 ---
 # Logit
@@ -55,4 +84,39 @@ $$g(Y) = X\beta$$
 ---
 # Logit in R
 
+```{r}
+logit_fit = glm(data=exp_result,
+                master~posttest+course_id+duration,
+                family=binomial())
+```
 
+---
+# Logit in R: Fit
+```{r, echo=FALSE}
+stargazer(logit_fit, ols_fit,
+          type='text', 
+          column.labels = c("similar", "transfer"), 
+          model.numbers=F, dep.var.labels.include = FALSE,
+          report=("vcp*"))
+```
+
+
+---
+# Logit in R: Predict
+
+```{r}
+pred_result = data.frame(ols=predict(ols_fit), 
+                         logit=predict.glm(logit_fit, type='response'))
+```
+
+```{r, ,echo=FALSE}
+qplot(data=pred_result, x=ols, y=logit)
+```
+
+---
+# Logit in R: 解释参数含义
+
+odds ratio: $\frac{Pr(Y|X_1, Z)}{Pr(Y|X_0, Z)}$
+```{r}
+exp(coef(logit_fit))
+```

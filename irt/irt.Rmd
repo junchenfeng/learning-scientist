@@ -15,6 +15,9 @@ output:
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
+library(dplyr)
+library(readr)
+library(ggplot2)
 ```
 
 
@@ -66,7 +69,31 @@ $$Pr(Y=1) = logit(X-b)$$
 
 问题来了：b怎么衡量？没有b怎么衡量X？
 
+---
+# Response Curve
 
+```{r, echo=FALSE}
+rasch_data = data.frame(x=seq(-4,4,0.1))
+rasch_data = rasch_data %>% mutate(y=1/(1+exp(-x)), model="RASCH")
+plot_data = rasch_data
+qplot(data=plot_data, x=x, y=y, geom='line', col=model)
+```
+
+---
+# Response Curve (2)
+
+*思考*： 哪题更难？
+
+```{r, echo=FALSE}
+easy_data = data.frame(x=seq(-4,4,0.1))
+easy_data = easy_data %>% mutate(y=1/(1+exp(-(x+1))), model="b=1")
+
+hard_data = data.frame(x=seq(-4,4,0.1))
+hard_data = hard_data %>% mutate(y=1/(1+exp(-(x-1))), model="b=-1")
+
+plot_data = rbind(rasch_data,easy_data, hard_data)
+qplot(data=plot_data, x=x, y=y, geom='line', col=model)
+```
 
 ---
 # 双参数模型
@@ -84,10 +111,38 @@ $$ 0.5 = logit(0) = logit(0*x+0)$$
 
 $$Pr(Y=1) = logit(aX-b)$$
 
-我们称$a$为区分度
+我们称 $a$ 为区分度
 
-*思考*: 如果杆是完全刚性的，$a$怎么取值?
+*思考*: 如果杆是完全刚性的， $a$ 怎么取值?
 
+
+---
+# 双参数模型(RC)
+
+*思考*： 哪题更难
+
+```{r, echo=FALSE}
+low_discrimiate_data = data.frame(x=seq(-4,4,0.1))
+low_discrimiate_data = low_discrimiate_data %>% mutate(y=1/(1+exp(-0.5*x)), model="alpha=0.5")
+high_discrimiate_data = data.frame(x=seq(-4,4,0.1))
+high_discrimiate_data = high_discrimiate_data %>% mutate(y=1/(1+exp(-2*x)), model="alpha=2")
+
+plot_data = rbind(rasch_data, low_discrimiate_data, high_discrimiate_data)
+
+qplot(data=plot_data, x=x, y=y, geom='line', col=model)
+```
+
+
+---
+# 双参数模型(RC)(2)
+
+*思考*： 哪题更难？
+
+```{r, echo=FALSE}
+plot_data = rbind(rasch_data, hard_data, high_discrimiate_data)
+
+qplot(data=plot_data, x=x, y=y, geom='line', col=model)
+```
 
 ---
 # 三参数模型
@@ -100,22 +155,28 @@ $$Pr(Y=1) = logit(aX-b)$$
 
 考虑判断题，渐近线应该在0.5；考虑三选一，渐近线应该在0.33；
 
-事实上，哪怕是填空题，也不一定不存在渐近线！！
+事实上，哪怕是填空题，也可能存在渐近线！！
 
 因此，三参数IRT模型增加了猜测系数
 
 $$ Pr(Y=1) = c + (1-c)logit(aX-b)$$
 
+---
+
+# 三参数模型（RC）
+
 
 ---
 # 多维IRT
 
-跳高的隐喻有一个重要的假设，那就是我们只衡量一维能力值；然而实际上我们可能需要衡量多维能力值
+跳高的隐喻有一个重要的假设，那就是我们只衡量一维能力值
+
+然而实际上我们可能需要衡量多维能力值
 
 这就打开了一个潘多拉魔盒
 
 ---
-# 多维IRT的噩梦（1）：乘法还是加法？
+# 噩梦（1）：方程形式
 
 多维IRT有两种做法
 
@@ -127,7 +188,7 @@ $$ Pr(Y=1) = logit(a_1X_1-b_1)logit(a_2X_2-b_2)$$
 *思考*：可以又加又乘么？
 
 ---
-# 多维IRT的噩梦（2）：变量是否需要可解释？
+# 噩梦（2）：变量可解释性
 
 
 考虑一元IRT模型，我们真的在测量数学能力么？
@@ -139,11 +200,15 @@ $$ Pr(Y=1) = logit(a_1X_1-b_1)logit(a_2X_2-b_2)$$
 如果要考虑变量的可解释性（比如锚定$X_k$到知识点），多元IRT方程就变成一个非常复杂的建模问题，并且可能破坏了IRT方程自身良好的预测能力！！
 
 ---
-# 多维降到1维？
+# 降维？
 
 问：如果一道题挂了多个知识点，是否可以拆为多条数据；然后每个知识点用一维IRT模型来估计？
 
-答：不能。因为这样无法合理归咎。极端情况下，对了就全会，错了就全不会；非常不合理！
+答：不能。因为这样无法合理归咎。
+
+对了就全会
+
+错了就全不会
 
 
 ---
@@ -151,24 +216,34 @@ $$ Pr(Y=1) = logit(a_1X_1-b_1)logit(a_2X_2-b_2)$$
 
 我们现在讨论IRT模型最主要的局限。
 
-在跳高比赛中，一个最最最最重要的假设是，运动员的水平是一个定值（或者严谨的说，不会随着每一次跳跃而改变）。
+在跳高比赛中，一个极端重要的假设是，运动员的水平是一个定值（或者严谨的说，不会随着每一次跳跃而改变）。
 
 类似的，我们认为，在考试中，孩子也不会随着做题而进步/退步。
 
 换句话说，不存在 **学习** 的可能性
 
-换句话说，不存在 **学习** 的可能性
-
-换句话说，不存在 **学习** 的可能性
-
-重要的话说三遍
-
-
 ---
-# 总结
+# 应用
 
 （1）IRT非常适合用于以排位为主要目标的终结性测评，它解决了异质试卷结果的比较问题。从ETS长期实践来看，效果也非常不错
 
 （2）IRT模型并不适合用于形成行测评。第一，它根本上否认学习的可能性；第二，它无法与知识点结构共存
 
-（3）以IRT为基础，可以构建[自适应测评](http://www.fengjunchen.com/cat/)；但是因为它并不是适合做自适应学习引擎（这个教训至少值1000w人民币）
+（3）以IRT为基础，可以构建[自适应测评](http://www.fengjunchen.com/cat/)；但是因为它并不是适合做自适应学习引擎（这个教训至少值1000w人民币）；甚至不能用它来做练习题的筛选
+
+---
+# IRT in R
+
+```{r}
+exp_result = read_delim("../data/exp_result.csv", delim='\t')
+valid_users = exp_result %>% filter(course_id=='interactive') %>% group_by(student_id) %>% summarize(n=n()) %>% filter(n==2)
+Q1 = exp_result %>% 
+  filter(course_id=='interactive', posttest=='similar', student_id %in% valid_users$student_id) %>%
+  select(student_id, master) %>% rename(q1=master)
+Q2 = exp_result %>% 
+  filter(course_id=='interactive', posttest=='transfer', student_id %in% valid_users$student_id) %>%
+  select(student_id, master) %>% rename(q2=master)
+Q = merge(Q1,Q2) %>% select (-student_id)
+
+```
+

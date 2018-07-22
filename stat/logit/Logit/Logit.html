@@ -31,14 +31,56 @@ class: center, middle, inverse, title-slide
 
 `\(Pr(Y=1)\)`意味着Y是一个随机变量，它必须要有分布函数 
 
-*思考* OLS里的$\epsilon$去哪里了？
+*思考* OLS里的 `\(\epsilon\)` 去哪里了？
 
 用OLS分析二元模型会有一些理论/实践问题
 
 - Y服从均匀分布（理论问题）
 
-- `\(\widehat{Pr(Y=1)}\)`不是一个合法概率，即它可能大于1或者小于0
+- `\(\widehat{Pr(Y=1)}\)` 不是一个合法概率，即它可能大于1或者小于0
 
+---
+# OLS example: Fit
+
+```
+## 
+## ================================================
+##                          Dependent variable:    
+##                      ---------------------------
+##                                similar          
+## ------------------------------------------------
+## posttesttransfer                0.066           
+##                            p = 0.00001***       
+##                                                 
+## course_idinteractive            0.126           
+##                             p = 0.000***        
+##                                                 
+## course_idlong_video             0.187           
+##                             p = 0.000***        
+##                                                 
+## course_idshort_video            0.050           
+##                              p = 0.024**        
+##                                                 
+## duration                       0.00000          
+##                             p = 0.000***        
+##                                                 
+## Constant                        0.185           
+##                             p = 0.000***        
+##                                                 
+## ------------------------------------------------
+## Observations                    4,304           
+## R2                              0.053           
+## Adjusted R2                     0.052           
+## Residual Std. Error       0.474 (df = 4298)     
+## F Statistic           48.057*** (df = 5; 4298)  
+## ================================================
+## Note:                *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+```
+
+---
+# OLS example: Predict
+
+![](Logit_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 
 ---
 # Logit
@@ -58,6 +100,82 @@ $$ Pr(Y=1) = \frac{1}{1+e^{-(X\beta)}}$$
 
 ---
 # Logit in R
+
+
+```r
+logit_fit = glm(data=exp_result,
+                master~posttest+course_id+duration,
+                family=binomial())
+```
+
+---
+# Logit in R: Fit
+
+```
+## 
+## ============================================================
+##                                Dependent variable:          
+##                      ---------------------------------------
+##                         logistic              OLS           
+##                         similar             transfer        
+## ------------------------------------------------------------
+## posttesttransfer         0.297               0.066          
+##                      p = 0.00001***      p = 0.00001***     
+##                                                             
+## course_idinteractive     0.571               0.126          
+##                       p = 0.000***        p = 0.000***      
+##                                                             
+## course_idlong_video      0.826               0.187          
+##                       p = 0.000***        p = 0.000***      
+##                                                             
+## course_idshort_video     0.238               0.050          
+##                       p = 0.019**         p = 0.024**       
+##                                                             
+## duration                0.00002             0.00000         
+##                       p = 0.000***        p = 0.000***      
+##                                                             
+## Constant                 -1.405              0.185          
+##                       p = 0.000***        p = 0.000***      
+##                                                             
+## ------------------------------------------------------------
+## Observations             4,304               4,304          
+## R2                                           0.053          
+## Adjusted R2                                  0.052          
+## Log Likelihood         -2,752.514                           
+## Akaike Inf. Crit.      5,517.029                            
+## Residual Std. Error                    0.474 (df = 4298)    
+## F Statistic                         48.057*** (df = 5; 4298)
+## ============================================================
+## Note:                            *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+```
+
+
+---
+# Logit in R: Predict
+
+
+```r
+pred_result = data.frame(ols=predict(ols_fit), 
+                         logit=predict.glm(logit_fit, type='response'))
+```
+
+![](Logit_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+# Logit in R: 解释参数含义
+
+odds ratio: `\(\frac{Pr(Y|X_1, Z)}{Pr(Y|X_0, Z)}\)`
+
+```r
+exp(coef(logit_fit))
+```
+
+```
+##          (Intercept)     posttesttransfer course_idinteractive 
+##            0.2454762            1.3457145            1.7698295 
+##  course_idlong_video course_idshort_video             duration 
+##            2.2848849            1.2687516            1.0000187
+```
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
