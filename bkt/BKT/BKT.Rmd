@@ -1,0 +1,148 @@
+---
+title: "贝叶斯知识追踪"
+subtitle: "Bayesian Knowledge Tracing"
+author: "冯俊晨"
+date: "2018/08/02"
+output:
+  xaringan::moon_reader:
+    css: [default, zh-CN.css]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE, message=FALSE}
+options(htmltools.dir.version = FALSE)
+library(readr)
+library(dplyr)
+exp_result = read_delim("/Users/fengjunchen/git/learning-scientist/data/exp_result.csv", delim='\t')
+Q = data.frame(course_id=as.character(), q1=as.integer(), q2=as.integer())
+for (group_name in unique(exp_result$course_id)){
+  
+  group_data = exp_result %>% filter(course_id==group_name)
+  
+  valid_users = group_data %>%
+    group_by(student_id) %>%
+    summarize(n=n()) %>%
+    filter(n==2)
+  item1 = group_data %>% 
+    filter(posttest=='similar', student_id %in% valid_users$student_id) %>%
+    dplyr::select(course_id, student_id, master) %>% rename(q1=master)
+  item2 = exp_result %>% 
+    filter(posttest=='transfer', student_id %in% valid_users$student_id) %>%
+    dplyr::select(course_id, student_id, master) %>% rename(q2=master)
+  q = merge(item1,item2) %>% dplyr::select (-student_id)
+  Q = rbind(Q,q)
+}
+
+test_data = Q %>%filter(course_id==group_name) %>% dplyr::select(-course_id)
+bkt_param = data.frame(course_id=as.character(), init=as.numeric(), learn=as.numeric(), guess=as.numeric(), slip=as.numeric())
+for (group_name in unique(exp_result$course_id)){
+  group_data = Q %>%filter(course_id==group_name) %>% dplyr::select(-course_id)
+  m = bkt.hmm.fit(p0, group_data)
+  bkt_param = rbind(bkt_param, data.frame(course_id=group_name, init=m$init, learn=m$learn, guess=m$guess, slip=m$slip))
+}
+
+```
+
+---
+# 定义学习效果
+
+假设学生的掌握程度只有会和不会两种；学习可以定义为 0 -> 1
+
+如果我们可以观察到学生的掌握程度，测评教学内容($C$)的方法较为简单
+
+$$P(X_1=1|X_0=0, C) $$
+
+如果有多个程度，例如Vygosky的proxy zone learning theory）, 定义学习就会变的很复杂（但很有意思）。
+$$P(X_1=1|X_0=0, C)$$
+$$P(X_1=2|X_0=0, C)$$
+$$P(X_1=2|X_0=1,C)$$
+---
+# 研究学习效果的障碍
+
+然而，学生的掌握程度是不可见的（如果真实存在的话）。我们只能看到学生的作答 $Y$（假设取值是0/1）。
+
+因此，我们需要从 $Y$ 去推测 $X$
+.pull-left[
+$$Y_t\dots,Y_0$$ 
+
+$$X_t|Y_t\dots,Y_0$$
+]
+
+.pull-right[
+
+我们看到的
+
+我们想要的
+
+]
+
+
+---
+# Sic Parvis Magna
+
+$$P(X_1|Y_1,Y_0) = \sum_{X_0} P(X_1,X_0|Y_1,Y_0)$$
+$$P(X_0|Y_1,Y_0) = \sum_{X_1} P(X_1,X_0|Y_1,Y_0)$$
+
+$$P(X_1,X_0|Y_1,Y_0) = \frac{P(X_1,X_0,Y_1,Y_0)}{\sum_{X_1}\sum_{X_0}P(X_1,X_0,Y_1,Y_0)}$$
+
+$$P(X_1,X_0,Y_1,Y_0) = P(Y_1|X_1)P(Y_0|X_0)P(X_1|X_0)P(X_0)$$
+
+---
+# BKT的核心元素
+
+猜测： $g=P(Y_t=1|X_t=0)$
+
+粗心： $s=P(Y_t=0|X_t=1)$
+
+学习： $\ell=P(X_t=1|X_{t-1}=0)$
+
+初始能力： $\pi=P(X_0=1)$
+
+*假设*
+
+没有遗忘： $P(X_t=0|X_{t-1}=1)=0$
+
+BKT事实上还有其他假设，但是我们暂时不考虑它
+
+---
+# 例子
+$$\pi=0.3, \ell=0.4, s=0.1, g=0.3,Y_1=1, Y_0=0$$
+$$P(X_1=1,X_0=1)=0.3$$
+$$P(X_1=1,X_0=0)=0.28$$
+$$P(X_1=0,X_0=0)=0.42$$
+$$P(Y_1,Y_0,X_1=1,X_0=1) = 0.021$$
+$$P(Y_1,Y_0,X_1=1,X_0=0) = 0.1764$$
+$$P(Y_1,Y_0,X_1=0,X_0=0) = 0.0882$$
+
+$$P(X_1=1,X_0=1|Y)\approx 0.07$$
+$$P(X_1=1,X_0=0|Y)\approx 0.62$$
+$$P(X_1=0,X_0=0|Y)\approx 0.31$$
+
+---
+# 怎么估计这些参数？
+
+Hidden Markov Model + EM algorithm = Magic
+
+
+
+```{r, message=FALSE}
+library(bkt)
+p0 = data.frame(init=0.5, learn=0.5, guess=0.25, slip=0.25)
+m = bkt.hmm.fit(p0, test_data)
+```
+
+---
+# DaDa
+```{r}
+print(m)
+```
+
+
+
+```{r}
+print(bkt_param)
+```

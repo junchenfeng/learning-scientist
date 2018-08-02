@@ -231,19 +231,5 @@ $$ Pr(Y=1) = logit(a_1X_1-b_1)logit(a_2X_2-b_2)$$
 
 （3）以IRT为基础，可以构建[自适应测评](http://www.fengjunchen.com/cat/)；但是因为它并不是适合做自适应学习引擎（这个教训至少值1000w人民币）；甚至不能用它来做练习题的筛选
 
----
-# IRT in R
 
-```{r}
-exp_result = read_delim("../data/exp_result.csv", delim='\t')
-valid_users = exp_result %>% filter(course_id=='interactive') %>% group_by(student_id) %>% summarize(n=n()) %>% filter(n==2)
-Q1 = exp_result %>% 
-  filter(course_id=='interactive', posttest=='similar', student_id %in% valid_users$student_id) %>%
-  select(student_id, master) %>% rename(q1=master)
-Q2 = exp_result %>% 
-  filter(course_id=='interactive', posttest=='transfer', student_id %in% valid_users$student_id) %>%
-  select(student_id, master) %>% rename(q2=master)
-Q = merge(Q1,Q2) %>% select (-student_id)
-
-```
 
