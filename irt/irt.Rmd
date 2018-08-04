@@ -157,15 +157,77 @@ qplot(data=plot_data, x=x, y=y, geom='line', col=model)
 
 事实上，哪怕是填空题，也可能存在渐近线！！
 
-因此，三参数IRT模型增加了猜测系数
-
-$$ Pr(Y=1) = c + (1-c)logit(aX-b)$$
+因此，三参数IRT模型增加了猜测系数 $$ Pr(Y=1) = c + (1-c)logit(aX-b)$$
 
 ---
+# IRT in R（1）
 
-# 三参数模型（RC）
+在R中使用IRT
+```{r, echo=FALSE, message=FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+exp_result = read_delim("/Users/fengjunchen/git/learning-scientist/data/exp_result.csv", delim='\t')
+
+Q = data.frame(course_id=as.character(), q1=as.integer(), q2=as.integer())
+for (group_name in unique(exp_result$course_id)){
+  
+  group_data = exp_result %>% filter(course_id==group_name)
+  
+  valid_users = group_data %>%
+    group_by(student_id) %>%
+    summarize(n=n()) %>%
+    filter(n==2)
+  item1 = group_data %>% 
+    filter(posttest=='similar', student_id %in% valid_users$student_id) %>%
+    dplyr::select(course_id, student_id, master) %>% rename(q1=master)
+  item2 = exp_result %>% 
+    filter(posttest=='transfer', student_id %in% valid_users$student_id) %>%
+    dplyr::select(course_id, student_id, master) %>% rename(q2=master)
+  q = merge(item1,item2) %>% dplyr::select (-student_id)
+  Q = rbind(Q,q)
+}
+irt_data = Q %>% dplyr::select(-course_id)
+```
+
+```{r, message=FALSE, warning=FALSE}
+head(irt_data)
+library(ltm)
+m1 = rasch(irt_data, constraint = cbind(ncol(irt_data) + 1, 1))  # 1 参数
+m2 = rasch(irt_data) # 2 参数
+m3 = tpm(irt_data, type = "rasch", max.guessing = 1) # 3 参数
+```
 
 
+---
+# IRT in R（2）
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+par(mfrow = c(2, 2))
+pl1 <- plot(m1)
+text(2, 0.35, "Rasch model\nDiscrimination = 1")
+pl2 <- plot(m2)
+text(2, 0.35, "Rasch model")
+pl3 <- plot(m3)
+text(2, 0.35, "Rasch model\nwith Guessing parameter")
+```
+
+---
+# IRT in R（3）
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+irt_param = data.frame(course_id=as.character(), item_id=as.character(), model=as.character(),alpha=as.numeric(), beta=as.numeric())
+for (group_name in unique(exp_result$course_id)){
+  group_data = Q %>%filter(course_id==group_name) %>% dplyr::select(-course_id)
+  m1 = rasch(group_data, constraint = cbind(ncol(group_data) + 1, 1))
+  m2 = rasch(group_data)
+  irt_param = rbind(irt_param, data.frame(course_id=group_name, item_id='q1', model='RASCH', alpha=1, beta=m1$coefficients[1,1]))
+  irt_param = rbind(irt_param, data.frame(course_id=group_name, item_id='q2', model='RASCH', alpha=1, beta=m1$coefficients[2,1]))
+  irt_param = rbind(irt_param, data.frame(course_id=group_name, item_id='q1', model='2PL', alpha=m2$coefficients[1,2], beta=m2$coefficients[1,1]))
+  irt_param = rbind(irt_param, data.frame(course_id=group_name, item_id='q2', model='2PL', alpha=m2$coefficients[2,2], beta=m2$coefficients[2,1]))
+    }
+```
+```{r, echo=FALSE}
+print(irt_param)
+```
 ---
 # 多维IRT
 

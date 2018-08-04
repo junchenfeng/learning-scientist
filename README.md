@@ -18,6 +18,20 @@
 ### Item Response Theory
 ### Bayesian Knowledge Tracing
 
+*安装R的bkt包*
+
+先克隆IEMDS提供的源码
+
+        git clone https://github.com/IEDMS/REDM.git
+
+进入Rstudio以后
+
+        install.packages(devtools)
+
+在Rstudio中open package bkt
+
+        build()
+        install()
 
 ## 自适应推荐
 ### Knowledge Space

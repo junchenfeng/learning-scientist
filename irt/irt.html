@@ -131,15 +131,64 @@ $$ 0.5 = logit(0) = logit(0*x+0)$$
 
 事实上，哪怕是填空题，也可能存在渐近线！！
 
-因此，三参数IRT模型增加了猜测系数
-
-$$ Pr(Y=1) = c + (1-c)logit(aX-b)$$
+因此，三参数IRT模型增加了猜测系数 $$ Pr(Y=1) = c + (1-c)logit(aX-b)$$`
 
 ---
+# IRT in R（1）
 
-# 三参数模型（RC）
+在R中使用IRT
 
 
+
+```r
+head(irt_data)
+```
+
+```
+##   q1 q2
+## 1  0  1
+## 2  0  0
+## 3  0  0
+## 4  0  0
+## 5  0  0
+## 6  1  1
+```
+
+```r
+library(ltm)
+m1 = rasch(irt_data, constraint = cbind(ncol(irt_data) + 1, 1))  # 1 参数
+m2 = rasch(irt_data) # 2 参数
+m3 = tpm(irt_data, type = "rasch", max.guessing = 1) # 3 参数
+```
+
+
+---
+# IRT in R（2）
+![](irt_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+# IRT in R（3）
+
+
+```
+##      course_id item_id model    alpha       beta
+## 1  interactive      q1 RASCH 1.000000 -0.6001527
+## 2  interactive      q2 RASCH 1.000000 -0.1381120
+## 3  interactive      q1   2PL 2.216513 -0.8638525
+## 4  interactive      q2   2PL 2.216513 -0.2001199
+## 5   long_video      q1 RASCH 1.000000 -0.2612905
+## 6   long_video      q2 RASCH 1.000000  0.1254073
+## 7   long_video      q1   2PL 2.431564 -0.3996729
+## 8   long_video      q2   2PL 2.431564  0.1914028
+## 9  short_video      q1 RASCH 1.000000 -0.8862845
+## 10 short_video      q2 RASCH 1.000000 -0.6094562
+## 11 short_video      q1   2PL 2.100567 -1.2329977
+## 12 short_video      q2   2PL 2.100567 -0.8500050
+## 13     control      q1 RASCH 1.000000 -1.2167692
+## 14     control      q2 RASCH 1.000000 -0.9403727
+## 15     control      q1   2PL 1.897226 -1.5917803
+## 16     control      q2   2PL 1.897226 -1.2333827
+```
 ---
 # 多维IRT
 
