@@ -20,7 +20,7 @@ library(dplyr)
 library(bkt)
 p0 = data.frame(init=0.5, learn=0.5, guess=0.25, slip=0.25)
 
-exp_result = read_delim("/Users/fengjunchen/git/learning-scientist/data/exp_result.csv", delim='\t')
+exp_result = read_delim("../../data/exp_result.csv", delim='\t')
 Q = data.frame(course_id=as.character(), q1=as.integer(), q2=as.integer())
 for (group_name in unique(exp_result$course_id)){
   
@@ -87,14 +87,6 @@ $$X_t|Y_t\dots,Y_0$$
 ---
 # Sic Parvis Magna
 
-$$P(X_1|Y_1,Y_0) = \frac{\sum_{X_0} P(X_1,X_0Y_1,Y_0)}{\sum_{X_0} \sum_{X_1}P(X_1,X_0Y_1,Y_0)}$$
-
-
-$$P(X_1,X_0,Y_1,Y_0) = P(Y_1|X_1)P(Y_0|X_0)P(X_1|X_0)P(X_0)$$
-
----
-# BKT的核心元素
-
 猜测： $g=P(Y_t=1|X_t=0)$
 
 粗心： $s=P(Y_t=0|X_t=1)$
@@ -103,11 +95,29 @@ $$P(X_1,X_0,Y_1,Y_0) = P(Y_1|X_1)P(Y_0|X_0)P(X_1|X_0)P(X_0)$$
 
 初始能力： $\pi=P(X_0=1)$
 
-*假设*
+$$P(X_1,X_0,Y_1,Y_0) = P(Y_1|X_1)P(Y_0|X_0)P(X_1|X_0)P(X_0)$$
+
+
+$$P(X_1|Y_1,Y_0) = \frac{\sum_{X_0} P(X_1,X_0Y_1,Y_0)}{\sum_{X_0} \sum_{X_1}P(X_1,X_0Y_1,Y_0)}$$
+
+[Knowledge tracing: Modeling the acquisition of procedural knowledge](http://act-r.psy.cmu.edu/wordpress/wp-content/uploads/2012/12/893CorbettAnderson1995.pdf)
+
+---
+# 经典BKT的核心假设
+
+*按扩展难易度排序* 
 
 没有遗忘： $P(X_t=0|X_{t-1}=1)=0$
 
-BKT事实上还有其他假设，但是我们暂时不考虑它
+题目同质
+
+学习者同质
+
+能力纬度单一
+
+题目之间不存在替代或者互补关系
+
+
 
 ---
 # 例子

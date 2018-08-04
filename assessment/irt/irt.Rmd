@@ -167,7 +167,7 @@ qplot(data=plot_data, x=x, y=y, geom='line', col=model)
 library(readr)
 library(dplyr)
 library(ggplot2)
-exp_result = read_delim("/Users/fengjunchen/git/learning-scientist/data/exp_result.csv", delim='\t')
+exp_result = read_delim("../../data/exp_result.csv", delim='\t')
 
 Q = data.frame(course_id=as.character(), q1=as.integer(), q2=as.integer())
 for (group_name in unique(exp_result$course_id)){
