@@ -1,4 +1,4 @@
-学习科学家培养方案
+Learning Scientist
 =====================
 
 # I.基础知识
@@ -33,5 +33,5 @@
         build()
         install()
 
-# IV.自适应推荐
+# IV.自适应算法
 ## Knowledge Space
