@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>知识空间</title>
+    <meta charset="utf-8">
+    <meta name="author" content="冯俊晨" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="zh-CN.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# 知识空间
+## Knowledge Space
+### 冯俊晨
+### 2018/08/05
+
+---
+
+
+---
+# Intelligent Tutor System（ITS）
+
+
+.pull-left[
+## 组成
+
+Domain Model 
+
+Student Model 
+
+Tutor Model
+
+User Interface
+]
+
+.pull-right[
+## 案例
+
+人教版教材教学顺序 / 题库
+
+熟能生巧 / 做题结果
+
+掌握程度判定 / 推荐策略
+
+手机小键盘答题交互 / 错误后文字显示答案
+
+]
+
+---
+# Knowledge Space
+
+知识空间帮助我们解决Domain Model的结构问题和Tutor Model的推荐策略问题
+
+本节课解决三个问题：
+
+（1）什么是知识空间
+
+（2）怎么使用知识空间
+
+（3）怎么构建知识空间
+
+---
+# 核心假设
+
+- 如果两个单元只相差一个知识点，并且学生已经掌握其中一个单元，他可以学会另一个单元
+  
+  + YES: {} -&gt; {a}
+  + YES: {a} -&gt; {a,b}
+  + NO: {a} -&gt; {a,b,c}
+  + NO: {a}, {b} -&gt; {a,b,c}
+
+- 学会了一个知识点组合，就等同于学会了其所有子集
+
+  + {a,b,c} -&gt; {a}, {b}, {c}, {a,b}, {b,c}, {a,c}, {a,b,c}
+
+
+- 所有教学目标可以用(有限的)知识点的排列组合表达
+
+  + {两位数乘两位数不进位, 长方形面积公式} 应该对应什么样的题目？
+  
+- 学生可以在不同的知识点组合中可以迁移已经学会的知识点
+
+  + 计算类/概念类
+  
+  + 思想
+
+---
+# 知识空间的定义
+
+- 学习路径 (learning path)：任何两个相邻知识单元之间只相差一个没有学过的知识点
+
+- 知识架构 (knowledge structure)：所有教学目标用知识点集合表示的并集
+
+- 知识空间：存在一个学习路径可以学完整个知识架构
+
+- 举例
+
+  + 知识架构1: {{a}, {b}, {a,b}}
+
+  + 知识架构2: {{a}, {b,c}}
+  
+*思考* 知识树是不是一个知识空间？
+
+*思考* 知识空间可不可以等同于知识树？
+
+*思考* 任何一张考卷是否可以转化为一个知识空间
+
+
+---
+# 知识空间上的搜索
+
+如果已知教学目标集合是一个知识空间，怎么找到学习路径？
+
+- 记录已经学会的知识点的组合(及其子集)
+
+- 在知识空间里找一个教学目标，这个目标所挂载的知识点可以用已经学会的知识点子集+一个元素的形式表达
+
+- 循环往复直到遍历整个知识点空间
+
+举例
+
+知识点空间：{{a}, {b}, {a,b},{a,b,c}}
+
+路径1: {a} -&gt; {a,b} -&gt; {a,b,c}
+
+路径2: {b} -&gt; {a,b} -&gt; {a,b,c}
+
+路径3: {a} -&gt; {b} -&gt; {a,b} -&gt; {a,b,c}
+
+
+---
+# 自适应学习
+
+There is a billion learning pathes. There is one for you.
+
+不同掌握基础的学生有不同的学习路径
+
+*同样的掌握基础可以有不同的学习路径*
+
+---
+# 知识空间的构建
+
+专家闻讯法
+
+
+---
+# KST in R
+  
+
+---
+# Reference
+
+[Spaces for the assessment of knowledge](https://www.sciencedirect.com/science/article/pii/S0020737385800316)
+
+[knowledge space theory literature list](http://kst.hockemeyer.at/kst-bib.html)
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
