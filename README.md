@@ -18,7 +18,30 @@ Learning Scientist
 ## Item Response Theory
 ## Bayesian Knowledge Tracing
 
-*安装R的bkt包*
+# IV.自适应算法
+## Knowledge Space
+## Computerized Adaptive Testing (TODO)
+
+
+# 软件
+
+推荐使用Rstudio做为开发工具
+
+*可以使用CRAN安装的包*
+
+    readr
+    dplyr
+    lm
+    car
+    stargazer
+    glm
+    ltm
+    kst
+ 
+
+*需要单独安装的包*
+
+    bkt
 
 先克隆IEMDS提供的源码
 
@@ -32,6 +55,3 @@ Learning Scientist
 
         build()
         install()
-
-# IV.自适应算法
-## Knowledge Space
