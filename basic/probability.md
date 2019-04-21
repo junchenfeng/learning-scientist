@@ -6,7 +6,7 @@
 
 (3) 以条件概率形式展示的全概公式
 
-事件(event)和概率(probability)
+1.事件(event)和概率(probability)
 ==========
 
 学生掌握了长方形周长公式；C = 1
@@ -29,7 +29,7 @@ P(A=1) = 0.3
 
 **思考2** P(A=0) = ?
 
-联合概率(joint probability)
+2.联合概率(joint probability)
 ==========
 
 学生掌握周长，同时掌握面积；C = 1, A = 1
@@ -44,7 +44,7 @@ P(C=1, A=0) = 0.35
 
 **思考4**: 如何绘制[维恩图](https://baike.baidu.com/item/%E6%96%87%E6%B0%8F%E5%9B%BE?fromtitle=%E7%BB%B4%E6%81%A9%E5%9B%BE&fromid=9416531)
 
-条件概率(conditional probability)
+3.条件概率(conditional probability)
 ==========
 
 P(A) ?= P(A|B)
@@ -70,7 +70,7 @@ P(A=0|C=1) = P(C=1, A=0) / P(C=1) = 0.35 / 0.6 = 7/12
 **思考6** 证明最后一个为恒等式 **以条件概率形式展示的全概公式**
 
 
-应用
+4.应用
 ====================
 
 # 刻画学习过程
